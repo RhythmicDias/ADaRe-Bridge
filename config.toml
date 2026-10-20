@@ -1,0 +1,5 @@
+device_name = "MPK mini"
+target_process = "Resolve.exe"
+jog_cc = 11
+zoom_cc = 12
+nav_cc = 13

@@ -1,6 +1,7 @@
 use std::mem::size_of;
 use windows_sys::Win32::UI::Input::KeyboardAndMouse::{
-    SendInput, INPUT, INPUT_0, INPUT_KEYBOARD, KEYBDINPUT, KEYEVENTF_KEYUP,
+    SendInput, INPUT, INPUT_0, INPUT_KEYBOARD, KEYBDINPUT, KEYEVENTF_EXTENDEDKEY, KEYEVENTF_KEYUP,
+    VK_DELETE, VK_DOWN, VK_END, VK_HOME, VK_INSERT, VK_LEFT, VK_NEXT, VK_PRIOR, VK_RIGHT, VK_UP,
 };
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -41,10 +42,29 @@ impl KeyCombination {
 pub struct InputInjector;
 
 impl InputInjector {
+    fn is_extended_key(vk: u16) -> bool {
+        matches!(
+            vk,
+            VK_LEFT
+                | VK_RIGHT
+                | VK_UP
+                | VK_DOWN
+                | VK_INSERT
+                | VK_DELETE
+                | VK_HOME
+                | VK_END
+                | VK_PRIOR
+                | VK_NEXT
+        )
+    }
+
     fn create_key_input(vk: u16, key_up: bool) -> INPUT {
         let mut flags = 0;
         if key_up {
             flags |= KEYEVENTF_KEYUP;
+        }
+        if Self::is_extended_key(vk) {
+            flags |= KEYEVENTF_EXTENDEDKEY;
         }
 
         INPUT {

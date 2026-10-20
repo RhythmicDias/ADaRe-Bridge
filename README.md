@@ -32,17 +32,23 @@ A high-performance, zero-latency bridge written in Rust that transforms an **Aka
 | **Knob 3 (Endless)** | CC 13 | **Clip / Edit Navigation** | `Up` / `Down` |
 | **Joystick (X-Axis)** | Pitchbend | **Variable Shuttle Playback** | `J` (rev), `K` (stop), `L` (fwd) |
 
-### Drum Pads (Bank A: Edit & Transport)
-| Pad | Function | Shortcut |
-| :---: | :--- | :--- |
-| **Pad 1** | **Mark In** | `I` |
-| **Pad 2** | **Mark Out** | `O` |
-| **Pad 3** | **Split / Blade** | `Ctrl + \` |
-| **Pad 4** | **Ripple Delete** | `Shift + Backspace` |
-| **Pad 5** | **Smart Insert** | `F9` |
-| **Pad 6** | **Ripple Overwrite** | `Shift + F10` |
-| **Pad 7** | **Append to End** | `Shift + F12` |
-| **Pad 8** | **Source Tape / Timeline Toggle** | `Q` |
+### Drum Pads (Bank A: Speed Editor Core)
+| Pad | Physical Position | Function | Shortcut |
+| :---: | :--- | :--- | :--- |
+| **Pad 1** | Bottom-Left | **Mark In** | `I` |
+| **Pad 2** | Bottom-Mid-Left | **Mark Out** | `O` |
+| **Pad 3** | Bottom-Mid-Right | **Split / Blade Clip** | `Ctrl + \` |
+| **Pad 4** | Bottom-Right | **Ripple Delete** | `Shift + Backspace` |
+| **Pad 5** | Top-Left | **Play / Pause Toggle** | `Space` |
+| **Pad 6** | Top-Mid-Left | **Toggle Snapping** | `N` |
+| **Pad 7** | Top-Mid-Right | **Cinema Fullscreen Viewer** | `Ctrl + F` |
+| **Pad 8** | Top-Right | **Undo** | `Ctrl + Z` |
+
+### Knobs & Navigation
+- **Jog Scrub (Knob 1 & Knob 5):** Both K1 and K5 operate as the accelerated search dial (`←` / `→` with true Windows extended key flags).
+- **Timeline Zoom (Knob 2 & Knob 6):** Zoom in / out (`Ctrl + =` / `Ctrl + -`).
+- **Clip Navigation (Knob 3 & Knob 7):** Jump to previous / next edit point (`Up` / `Down`).
+- **Live CC Logger:** Turning any knob prints its exact CC number in the terminal in real time.
 
 ### Drum Pads (Bank B: Trim & Modifiers)
 | Pad | Function | Shortcut |
