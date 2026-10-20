@@ -64,10 +64,29 @@ impl ActionEngine {
     }
 
     fn handle_cc(&mut self, controller: u8, value: u8) {
-        info!("Knob CC: {}, Value: {}", controller, value);
+        info!("Knob/Pad CC: {}, Value: {}", controller, value);
 
-        // Jog Wheel: Support configured CC, Knob 5 (CC 11), or Knob 1 (CC 70)
-        if controller == self.config.jog_cc || controller == 70 || controller == 11 {
+        // Bank B Pads (CC 16..23)
+        if (16..=23).contains(&controller) {
+            // Only trigger action on Pad Press (Value > 0)
+            if value > 0 {
+                match controller {
+                    16 => InputInjector::send_key_press(&KeyCombination::new(VK_OEM_4)), // Pad 9: Trim In [
+                    17 => InputInjector::send_key_press(&KeyCombination::new(VK_OEM_6)), // Pad 10: Trim Out ]
+                    18 => InputInjector::send_key_press(&KeyCombination::new(b'T' as u16).with_ctrl()), // Pad 11: Cross Dissolve Ctrl+T
+                    19 => InputInjector::send_key_press(&KeyCombination::new(b'Y' as u16).with_ctrl()), // Pad 12: Redo Ctrl+Y
+                    20 => InputInjector::send_key_press(&KeyCombination::new(VK_DOWN)), // Pad 13: Next Edit Cut
+                    21 => InputInjector::send_key_press(&KeyCombination::new(VK_UP)), // Pad 14: Prev Edit Cut
+                    22 => InputInjector::send_key_press(&KeyCombination::new(b'M' as u16)), // Pad 15: Add Marker M
+                    23 => InputInjector::send_key_press(&KeyCombination::new(VK_DELETE)), // Pad 16: Delete Selected Clip
+                    _ => {}
+                }
+            }
+            return;
+        }
+
+        // Knobs 1 & 5 (CC 7 & CC 11): Timeline Jog Wheel
+        if controller == self.config.jog_cc || controller == 11 || controller == 7 {
             if let Some((dir, steps)) = self.jog.process_cc(value) {
                 let vk = match dir {
                     JogDirection::Forward => VK_RIGHT,
@@ -78,8 +97,8 @@ impl ActionEngine {
                     InputInjector::send_key_press(&combo);
                 }
             }
-        // Zoom: Support configured CC, Knob 6 (CC 12), or Knob 2 (CC 71)
-        } else if controller == self.config.zoom_cc || controller == 71 || controller == 12 {
+        // Knobs 2 & 6 (CC 10 & CC 69): Timeline Zoom
+        } else if controller == self.config.zoom_cc || controller == 10 || controller == 69 {
             if let Some(prev) = self.last_zoom_val {
                 if value != prev {
                     let diff = (value as i16) - (prev as i16);
@@ -89,13 +108,24 @@ impl ActionEngine {
                 }
             }
             self.last_zoom_val = Some(value);
-        // Clip Navigation: Support configured CC, Knob 7 (CC 13), or Knob 3 (CC 72)
-        } else if controller == self.config.nav_cc || controller == 72 || controller == 13 {
+        // Knobs 3 & 7 (CC 1 & CC 65): Clip Navigation (Prev/Next Cut)
+        } else if controller == self.config.nav_cc || controller == 1 || controller == 65 {
             if let Some(prev) = self.last_nav_val {
                 if value != prev {
                     let diff = (value as i16) - (prev as i16);
                     let is_fwd = diff > 0 && diff < 64 || diff < -64;
                     let vk = if is_fwd { VK_DOWN } else { VK_UP };
+                    InputInjector::send_key_press(&KeyCombination::new(vk));
+                }
+            }
+            self.last_nav_val = Some(value);
+        // Knobs 4 & 8 (CC 2 & CC 91): Page Navigation (Fast Scrub)
+        } else if controller == 2 || controller == 91 {
+            if let Some(prev) = self.last_nav_val {
+                if value != prev {
+                    let diff = (value as i16) - (prev as i16);
+                    let is_fwd = diff > 0 && diff < 64 || diff < -64;
+                    let vk = if is_fwd { VK_NEXT } else { VK_PRIOR };
                     InputInjector::send_key_press(&KeyCombination::new(vk));
                 }
             }
@@ -132,16 +162,16 @@ impl ActionEngine {
     fn handle_note_on(&mut self, note: u8) {
         info!("Executing pad action for note: {}", note);
         match note {
-            // Pad 1: Mark In
+            // Pad 1: Mark In (I)
             36 => InputInjector::send_key_press(&KeyCombination::new(b'I' as u16)),
-            // Pad 2: Mark Out (supports both 38 and 37)
+            // Pad 2: Mark Out (O)
             37 | 38 => InputInjector::send_key_press(&KeyCombination::new(b'O' as u16)),
-            // Pad 3: Blade / Split Clip (Ctrl+\)
-            40 => InputInjector::send_key_press(&KeyCombination::new(VK_OEM_5).with_ctrl()),
-            // Pad 4: Ripple Delete (Shift+Backspace) (supports both 41 and 39)
-            39 | 41 => InputInjector::send_key_press(&KeyCombination::new(VK_BACK).with_shift()),
-            // Pad 5: Play / Pause (Space) (supports 42 and 43)
+            // Pad 3: Play / Pause (Space)
             42 | 43 => InputInjector::send_key_press(&KeyCombination::new(VK_SPACE)),
+            // Pad 4: Blade / Split Clip (Ctrl+\)
+            40 | 46 => InputInjector::send_key_press(&KeyCombination::new(VK_OEM_5).with_ctrl()),
+            // Pad 5: Ripple Delete (Shift+Backspace)
+            39 | 41 | 45 => InputInjector::send_key_press(&KeyCombination::new(VK_BACK).with_shift()),
             // Pad 6: Snapping Toggle (N)
             47 => InputInjector::send_key_press(&KeyCombination::new(b'N' as u16)),
             // Pad 7: Cinema Viewer Fullscreen (Ctrl+F)
@@ -153,8 +183,6 @@ impl ActionEngine {
 
             // Additional Bank B Trims
             44 => InputInjector::send_key_press(&KeyCombination::new(VK_OEM_4)), // Trim In [
-            45 => InputInjector::send_key_press(&KeyCombination::new(VK_OEM_6)), // Trim Out ]
-            46 => InputInjector::send_key_press(&KeyCombination::new(b'T' as u16).with_ctrl()), // Transition Ctrl+T
             _ => debug!("Unmapped note: {}", note),
         }
     }

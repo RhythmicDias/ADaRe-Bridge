@@ -33,33 +33,40 @@ A high-performance, zero-latency bridge written in Rust that transforms an **Aka
 | **Joystick (X-Axis)** | Pitchbend | **Variable Shuttle Playback** | `J` (rev), `K` (stop), `L` (fwd) |
 
 ### Drum Pads (Bank A: Speed Editor Core)
-| Pad | Physical Position | Function | Shortcut |
-| :---: | :--- | :--- | :--- |
-| **Pad 1** | Bottom-Left | **Mark In** | `I` |
-| **Pad 2** | Bottom-Mid-Left | **Mark Out** | `O` |
-| **Pad 3** | Bottom-Mid-Right | **Split / Blade Clip** | `Ctrl + \` |
-| **Pad 4** | Bottom-Right | **Ripple Delete** | `Shift + Backspace` |
-| **Pad 5** | Top-Left | **Play / Pause Toggle** | `Space` |
-| **Pad 6** | Top-Mid-Left | **Toggle Snapping** | `N` |
-| **Pad 7** | Top-Mid-Right | **Cinema Fullscreen Viewer** | `Ctrl + F` |
-| **Pad 8** | Top-Right | **Undo** | `Ctrl + Z` |
+| Pad | Note | Function | Shortcut |
+| :---: | :---: | :--- | :--- |
+| **Pad 1** | 36 | **Mark In** | `I` |
+| **Pad 2** | 38 | **Mark Out** | `O` |
+| **Pad 3** | 42 | **Play / Pause Toggle** | `Space` |
+| **Pad 4** | 46 | **Split / Blade Clip** | `Ctrl + \` |
+| **Pad 5** | 45 | **Ripple Delete** | `Shift + Backspace` |
+| **Pad 6** | 47 | **Toggle Snapping** | `N` |
+| **Pad 7** | 48 | **Cinema Fullscreen Viewer** | `Ctrl + F` |
+| **Pad 8** | 49 | **Undo** | `Ctrl + Z` |
 
-### Knobs & Navigation
-- **Jog Scrub (Knob 1 & Knob 5):** Both K1 and K5 operate as the accelerated search dial (`←` / `→` with true Windows extended key flags).
-- **Timeline Zoom (Knob 2 & Knob 6):** Zoom in / out (`Ctrl + =` / `Ctrl + -`).
-- **Clip Navigation (Knob 3 & Knob 7):** Jump to previous / next edit point (`Up` / `Down`).
-- **Live CC Logger:** Turning any knob prints its exact CC number in the terminal in real time.
+### Drum Pads (Bank B: Trimming & Clip Actions)
+| Pad | CC | Function | Shortcut |
+| :---: | :---: | :--- | :--- |
+| **Pad 9** | 16 | **Trim In** | `[` |
+| **Pad 10** | 17 | **Trim Out** | `]` |
+| **Pad 11** | 18 | **Add Transition (Cross Dissolve)** | `Ctrl + T` |
+| **Pad 12** | 19 | **Redo** | `Ctrl + Y` |
+| **Pad 13** | 20 | **Next Edit Cut** | `Down` |
+| **Pad 14** | 21 | **Previous Edit Cut** | `Up` |
+| **Pad 15** | 22 | **Add Marker** | `M` |
+| **Pad 16** | 23 | **Delete Selected Clip** | `Delete` |
 
-### Drum Pads (Bank B: Trim & Modifiers)
-| Pad | Function | Shortcut |
-| :---: | :--- | :--- |
-| **Pad 9** | **Trim In** | `[` |
-| **Pad 10** | **Trim Out** | `]` |
-| **Pad 11** | **Add Transition (Cross Dissolve)** | `Ctrl + T` |
-| **Pad 12** | **Toggle Snapping** | `N` |
-| **Pad 13** | **Cinema Fullscreen Viewer** | `Ctrl + F` |
-| **Pad 14** | **Undo** | `Ctrl + Z` |
-| **Pad 15** | **Redo** | `Ctrl + Y` |
+### 8 Endless Knobs (Transport & Timeline Navigation)
+| Knob | CC | Function | Shortcut |
+| :---: | :---: | :--- | :--- |
+| **Knob 1** | 7 | **Timeline Jog Scrub (Search Dial)** | `←` / `→` |
+| **Knob 2** | 10 | **Timeline Zoom In / Out** | `Ctrl + =` / `Ctrl + -` |
+| **Knob 3** | 1 | **Jump Previous / Next Cut** | `Up` / `Down` |
+| **Knob 4** | 2 | **Fast Page Navigation** | `Page Up` / `Page Down` |
+| **Knob 5** | 11 | **Timeline Jog Scrub (Search Dial)** | `←` / `→` |
+| **Knob 6** | 69 | **Timeline Zoom In / Out** | `Ctrl + =` / `Ctrl + -` |
+| **Knob 7** | 65 | **Jump Previous / Next Cut** | `Up` / `Down` |
+| **Knob 8** | 91 | **Fast Page Navigation** | `Page Up` / `Page Down` |
 
 ---
 

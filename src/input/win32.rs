@@ -59,6 +59,8 @@ impl InputInjector {
     }
 
     fn create_key_input(vk: u16, key_up: bool) -> INPUT {
+        use windows_sys::Win32::UI::Input::KeyboardAndMouse::MapVirtualKeyW;
+
         let mut flags = 0;
         if key_up {
             flags |= KEYEVENTF_KEYUP;
@@ -67,12 +69,14 @@ impl InputInjector {
             flags |= KEYEVENTF_EXTENDEDKEY;
         }
 
+        let scan_code = unsafe { MapVirtualKeyW(vk as u32, 0) as u16 };
+
         INPUT {
             r#type: INPUT_KEYBOARD,
             Anonymous: INPUT_0 {
                 ki: KEYBDINPUT {
                     wVk: vk,
-                    wScan: 0,
+                    wScan: scan_code,
                     dwFlags: flags,
                     time: 0,
                     dwExtraInfo: 0,
