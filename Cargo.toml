@@ -1,0 +1,33 @@
+[package]
+name = "adare-bridge"
+version = "0.1.0"
+edition = "2021"
+description = "ADaRe-Bridge: High-performance Akai MPK Mini to DaVinci Resolve Speed Editor Bridge"
+authors = ["Stephen Dias"]
+repository = "https://github.com/RhythmicDias/ADaRe-Bridge"
+license = "MIT"
+
+[dependencies]
+midir = "0.10"
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.8"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+anyhow = "1.0"
+
+[dependencies.windows-sys]
+version = "0.59"
+features = [
+    "Win32_Foundation",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_System_Threading",
+    "Win32_System_ProcessStatus",
+]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
